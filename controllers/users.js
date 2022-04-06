@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const {StatusCodes} = require('http-status-codes');
 const userModel = require("../models/user");
 const {getPageNo, getPageSize} = require('../utils/helper');
 
@@ -16,9 +17,9 @@ exports.getAll = async (req, res, next) => {
 				totalCount: totalCount,
 				records: user,
 			};
-			res.status(200).send(result);
+			res.status(StatusCodes.OK).send(result);
 		} else {
-			res.status(404).send({message : "Not found."});
+			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
 	} catch (e) {
 		console.log(`Error in getById`, e);
@@ -31,9 +32,9 @@ exports.getById = async (req, res, next) => {
 		const id = req.params.id;
 		const user = await userModel.findById(id);
 		if (!_.isEmpty(user)) {
-			res.status(200).send(user[0]);
+			res.status(StatusCodes.OK).send(user[0]);
 		} else {
-			res.status(404).send({message : "Not found."});
+			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
 	} catch (e) {
 		console.log(`Error in getById`, e);
@@ -45,9 +46,9 @@ exports.create = async (req, res, next) => {
 	try {
 		const user = await userModel.insert(req.body);
 		if (!_.isEmpty(user)) {
-			res.status(201).send(user[0]);
+			res.status(StatusCodes.CREATED).send(user[0]);
 		} else {
-			res.status(404).send({message : "Not found."});
+			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
 	} catch (e) {
 		console.log(`Error in getById`, e);
@@ -60,9 +61,9 @@ exports.update = async (req, res, next) => {
 		const id = req.params.id;
 		const user = await userModel.update(id, req.body);
 		if (!_.isEmpty(user)) {
-			res.status(200).send(user[0]);
+			res.status(StatusCodes.OK).send(user[0]);
 		} else {
-			res.status(400).send({message : "Bad request."});
+			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});
 		}
 	} catch (e) {
 		console.log(`Error in getById`, e);
@@ -75,9 +76,9 @@ exports.remove = async (req, res, next) => {
 		const id = req.params.id;
 		const user = await userModel.remove(id);
 		if (user) {
-			res.status(200).send({message : "Resource deleted"});
+			res.status(StatusCodes.OK).send({message : "Resource deleted"});
 		} else {
-			res.status(400).send({message : "Bad request."});
+			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});
 		}
 	} catch (e) {
 		console.log(`Error in getById`, e);

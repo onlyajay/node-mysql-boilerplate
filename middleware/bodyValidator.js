@@ -1,10 +1,12 @@
 const _ = require("lodash");
+const {StatusCodes} = require('http-status-codes');
+
 function bodyValidator(model) {
     return (req, res, next) => {
         try {
             const bodyParams = req.body;
             if( _.isEmpty(model) || _.isEmpty(bodyParams)){
-                return res.status(400).send("Bad Request");
+                return res.status(StatusCodes.BAD_REQUEST).send("Bad Request");
             }
 
             let missingKeys = [];
@@ -19,9 +21,9 @@ function bodyValidator(model) {
             }
 
             if(!_.isEmpty(missingKeys)){
-                return res.status(400).send(`Bad Request : Missing keys - ${missingKeys.join(",")}`);
+                return res.status(StatusCodes.BAD_REQUEST).send(`Bad Request : Missing keys - ${missingKeys.join(",")}`);
             } else if (!_.isEmpty(wrongType)) {
-                return res.status(400).send(`Bad Request : Wrong datatype for - ${wrongType.join(",")}`);
+                return res.status(StatusCodes.BAD_REQUEST).send(`Bad Request : Wrong datatype for - ${wrongType.join(",")}`);
             } else {
                 next();
             }

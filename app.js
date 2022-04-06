@@ -11,7 +11,8 @@ const path = require("path");
 const fileWriter = rfs.createStream('errors.log', {
     interval: '1d', // rotate daily
     path: path.join(__dirname, 'log')
-})
+});
+const {StatusCodes} = require('http-status-codes');
 
 const allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -33,21 +34,21 @@ app.use(bodyParser.json());
 
 app.use("/api/v1", routes);
 app.use('/favicon.ico', (req, res) => {
-    res.status(200).send();
+    res.status(StatusCodes.OK).send();
 });
 
 app.use((req, res, next) => {
     const error = new Error("Not found");
-    error.status = 404;
+    error.status = StatusCodes.NOT_FOUND;
     next(error);
 });
 
 // error handler middleware
 app.use((error, req, res) => {
     if (process.env.NODE_ENV === "dev") {
-        res.status(error.status || 500).send({message: error.message || 'Internal Server Error',});
+        res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).send({message: error.message || 'Internal Server Error',});
     } else {
-        res.status(error.status || 500).send({message: 'Internal Server Error',});
+        res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).send({message: 'Internal Server Error',});
     }
 });
 

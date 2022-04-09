@@ -22,7 +22,7 @@ exports.getAll = async (req, res, next) => {
 			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
 	} catch (e) {
-		console.log(`Error in getById`, e);
+		console.log(`Error in getAll`, e);
 		next(e);
 	}
 };
@@ -51,7 +51,7 @@ exports.create = async (req, res, next) => {
 			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
 	} catch (e) {
-		console.log(`Error in getById`, e);
+		console.log(`Error in create`, e);
 		next(e);
 	}
 };
@@ -66,7 +66,7 @@ exports.update = async (req, res, next) => {
 			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});
 		}
 	} catch (e) {
-		console.log(`Error in getById`, e);
+		console.log(`Error in update`, e);
 		next(e);
 	}
 };
@@ -81,7 +81,7 @@ exports.remove = async (req, res, next) => {
 			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});
 		}
 	} catch (e) {
-		console.log(`Error in getById`, e);
+		console.log(`Error in remove`, e);
 		next(e);
 	}
 };

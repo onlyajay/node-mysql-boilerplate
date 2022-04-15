@@ -85,3 +85,28 @@ exports.remove = async (req, res, next) => {
 		next(e);
 	}
 };
+
+exports.search = async (req, res, next) => {
+	try {
+		const pageNo = await getPageNo(req);
+		const pageSize = await getPageSize(req);
+		const offset = (pageNo - 1) * pageSize;
+		const searchKey = req.params.searchKey;
+		const totalCount = await model.searchCount(searchKey.toLowerCase());
+		const data = await model.search(offset, pageSize, searchKey.toLowerCase());
+		if (!_.isEmpty(data)) {
+			const result = {
+				pageNo: pageNo,
+				pageSize: pageSize,
+				totalCount: totalCount,
+				records: data,
+			};
+			res.status(StatusCodes.OK).send(result);
+		} else {
+			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
+		}
+	} catch (e) {
+		console.log(`Error in getAll`, e);
+		next(e);
+	}
+};

@@ -10,5 +10,6 @@ router.post('/', checkAuth, bodyValidator(createDto), controller.create);
 router.get('/:id', checkAuth, controller.getById);
 router.put('/:id', checkAuth, controller.update);
 router.delete('/:id', checkAuth, controller.remove);
+router.get('/search/:searchKey', checkAuth, controller.search);
 
 module.exports = router;

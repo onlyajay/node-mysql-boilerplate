@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const {StatusCodes} = require('http-status-codes');
-const userModel = require("../models/user");
+const model = require("../models/user");
 const {getPageNo, getPageSize} = require('../utils/helper');
 
 exports.getAll = async (req, res, next) => {
@@ -8,8 +8,8 @@ exports.getAll = async (req, res, next) => {
 		const pageNo = await getPageNo(req);
 		const pageSize = await getPageSize(req);
 		const offset = (pageNo - 1) * pageSize;
-		const totalCount = await userModel.count();
-		const user = await userModel.find(offset, pageSize);
+		const totalCount = await model.count();
+		const user = await model.find(offset, pageSize);
 		if (!_.isEmpty(user)) {
 			const result = {
 				pageNo: pageNo,
@@ -30,7 +30,7 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await userModel.findById(id);
+		const user = await model.findById(id);
 		if (!_.isEmpty(user)) {
 			res.status(StatusCodes.OK).send(user[0]);
 		} else {
@@ -44,7 +44,7 @@ exports.getById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
 	try {
-		const user = await userModel.insert(req.body);
+		const user = await model.insert(req.body);
 		if (!_.isEmpty(user)) {
 			res.status(StatusCodes.CREATED).send(user[0]);
 		} else {
@@ -59,7 +59,7 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await userModel.update(id, req.body);
+		const user = await model.update(id, req.body);
 		if (!_.isEmpty(user)) {
 			res.status(StatusCodes.OK).send(user[0]);
 		} else {
@@ -74,7 +74,7 @@ exports.update = async (req, res, next) => {
 exports.remove = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await userModel.remove(id);
+		const user = await model.remove(id);
 		if (user) {
 			res.status(StatusCodes.OK).send({message : "Resource deleted"});
 		} else {

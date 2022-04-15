@@ -9,13 +9,13 @@ exports.getAll = async (req, res, next) => {
 		const pageSize = await getPageSize(req);
 		const offset = (pageNo - 1) * pageSize;
 		const totalCount = await model.count();
-		const user = await model.find(offset, pageSize);
-		if (!_.isEmpty(user)) {
+		const data = await model.find(offset, pageSize);
+		if (!_.isEmpty(data)) {
 			const result = {
 				pageNo: pageNo,
 				pageSize: pageSize,
 				totalCount: totalCount,
-				records: user,
+				records: data,
 			};
 			res.status(StatusCodes.OK).send(result);
 		} else {
@@ -30,9 +30,9 @@ exports.getAll = async (req, res, next) => {
 exports.getById = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await model.findById(id);
-		if (!_.isEmpty(user)) {
-			res.status(StatusCodes.OK).send(user[0]);
+		const data = await model.findById(id);
+		if (!_.isEmpty(data)) {
+			res.status(StatusCodes.OK).send(data[0]);
 		} else {
 			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
@@ -44,9 +44,9 @@ exports.getById = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
 	try {
-		const user = await model.insert(req.body);
-		if (!_.isEmpty(user)) {
-			res.status(StatusCodes.CREATED).send(user[0]);
+		const data = await model.insert(req.body);
+		if (!_.isEmpty(data)) {
+			res.status(StatusCodes.CREATED).send(data[0]);
 		} else {
 			res.status(StatusCodes.NOT_FOUND).send({message : "Not found."});
 		}
@@ -59,9 +59,9 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await model.update(id, req.body);
-		if (!_.isEmpty(user)) {
-			res.status(StatusCodes.OK).send(user[0]);
+		const data = await model.update(id, req.body);
+		if (!_.isEmpty(data)) {
+			res.status(StatusCodes.OK).send(data[0]);
 		} else {
 			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});
 		}
@@ -74,8 +74,8 @@ exports.update = async (req, res, next) => {
 exports.remove = async (req, res, next) => {
 	try {
 		const id = req.params.id;
-		const user = await model.remove(id);
-		if (user) {
+		const data = await model.remove(id);
+		if (data) {
 			res.status(StatusCodes.OK).send({message : "Resource deleted"});
 		} else {
 			res.status(StatusCodes.BAD_REQUEST).send({message : "Bad request."});

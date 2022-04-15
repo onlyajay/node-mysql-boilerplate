@@ -3,8 +3,10 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser')
 const http = require("http");
+const https = require('https');
 const app = express();
 const port = process.env.PORT || 3000;
+//const port_https = process.env.PORT_HTTPS || 3001;
 const routes = require('./routes');
 const rfs = require("rotating-file-stream");
 const path = require("path");
@@ -13,6 +15,7 @@ const fileWriter = rfs.createStream('errors.log', {
     path: path.join(__dirname, 'log')
 });
 const {StatusCodes} = require('http-status-codes');
+const fs = require("fs");
 
 const allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -53,5 +56,14 @@ app.use((error, req, res) => {
 });
 
 http.createServer(app).listen(port, () => {
-    console.log('API server started on: ' + port);
+    console.log('HTTP API server started on: ' + port);
 });
+
+// Create an HTTPS service identical to the HTTP service. Uncomment below line
+// const options = {
+//    key: fs.readFileSync('/domain.com.key'),
+//    cert: fs.readFileSync('/certificate.crt')
+// };
+// https.createServer(options, app).listen(port_https, () => {
+//     console.log('HTTPS API server started on: ' + port_https);
+// });

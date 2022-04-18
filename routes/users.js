@@ -11,5 +11,6 @@ router.get('/:id', checkAuth, controller.getById);
 router.put('/:id', checkAuth, controller.update);
 router.delete('/:id', checkAuth, controller.remove);
 router.get('/search/:searchKey', checkAuth, controller.search);
+router.post('/search-by-column', checkAuth, controller.searchByColumn);
 
 module.exports = router;

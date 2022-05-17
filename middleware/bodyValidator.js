@@ -55,5 +55,4 @@ function bodyValidator(model) {
     };
 }
 
-
 module.exports = bodyValidator;

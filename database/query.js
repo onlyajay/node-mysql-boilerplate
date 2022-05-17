@@ -1,11 +1,11 @@
 const connection = require('./connection');
 
-exports.getRows = async (query) => {
-    return connection.query(query);
+exports.getRows = async (query, params) => {
+    return connection.query(query, params);
 }
 
-exports.insertRow = async (query, object) => {
-    const result = await connection.query(query, object);
+exports.insertRow = async (query, params) => {
+    const result = await connection.query(query, params);
     if (result && result.affectedRows > 0) {
         return result.insertId;
     } else {
@@ -18,7 +18,7 @@ exports.updateRow = async (query, valueArray) => {
     return !!(result && result.affectedRows > 0);
 }
 
-exports.deleteRow = async (query) => {
-    const result = await connection.query(query);
+exports.deleteRow = async (query, params) => {
+    const result = await connection.query(query, params);
     return !!(result && result.affectedRows > 0);
 }

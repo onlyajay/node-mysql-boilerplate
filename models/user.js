@@ -1,18 +1,18 @@
 const {getRows, insertRow, updateRow, deleteRow} = require('../database/query');
 
 exports.find = async (offset, pageSize) => {
-    const query = `SELECT * FROM USERS LIMIT ${offset}, ${pageSize}`;
-    return getRows(query);
+    const query = `SELECT * FROM USERS LIMIT ?, ?`;
+    return getRows(query, [offset, pageSize]);
 }
 
 exports.findById = async (id) => {
-    const query = `SELECT * FROM USERS WHERE USER_ID = ${id}`;
-    return getRows(query);
+    const query = `SELECT * FROM USERS WHERE USER_ID = ?`;
+    return getRows(query, [id]);
 }
 
 exports.insert = async (object) => {
     const query = `INSERT INTO USERS SET ?`;
-    const id = await insertRow(query, object,"insert");
+    const id = await insertRow(query, object);
     return id ? this.findById(id) : null;
 }
 
@@ -23,15 +23,16 @@ exports.update = async (id, object) => {
         updateKeys.push(`${key}=?`);
         updateValues.push(`${object[key]}`);
     }
-    let query = `UPDATE USERS SET ? WHERE USER_ID = ${id}`;
-    query = query.replace("?", updateKeys.join(","));
+    let query = `UPDATE USERS SET # WHERE USER_ID = ?`;
+    query = query.replace("#", updateKeys.join(","));
+    updateValues.push(id);
     const result = await updateRow(query, updateValues);
     return result ? this.findById(id) : null;
 }
 
 exports.remove = async (id) => {
-    const query = `DELETE FROM USERS WHERE USER_ID = ${id}`;
-    return deleteRow(query);
+    const query = `DELETE FROM USERS WHERE USER_ID = ?`;
+    return deleteRow(query, [id]);
 }
 
 exports.count = async () => {
